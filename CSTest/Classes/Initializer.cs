@@ -2,6 +2,7 @@
 using CSTest.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CSTest.Classes
@@ -13,15 +14,15 @@ namespace CSTest.Classes
     {
         static Initializer initializer;
 
-        List<Category> categories = new List<Category>();
-        List<ITrade> portfolio = new List<ITrade>();
+        List<Category> categories;
+        List<ITrade> portfolio;
 
         private static object locker = new object();
 
         protected Initializer()
         {
-            InitCategories();
-            InitPortfolio();
+            categories = new List<Category>();
+            portfolio = new List<ITrade>();
         }
 
         public static Initializer GetInitializer()
@@ -46,10 +47,6 @@ namespace CSTest.Classes
             {
                 return categories;
             }
-            set
-            {
-                categories = value;
-            }
         }
 
         public List<ITrade> Portfolio
@@ -58,33 +55,33 @@ namespace CSTest.Classes
             {
                 return portfolio;
             }
-            set
-            {
-                portfolio = value;
-            }
         }
 
-        /// <summary>
-        /// Initializes the Categories collection according to the example
-        /// </summary>
-        private void InitCategories()
+        public void AddCategory(Category category)
         {
-            categories = new List<Category>();
-            categories.Add(new Category { Description = "LOWRISK", Rule = ComparisonRule.LessThan, ParameterValue = 1000000, Sector = ClientSector.Public });
-            categories.Add(new Category { Description = "MEDIUMRISK", Rule = ComparisonRule.GreaterThan, ParameterValue = 1000000, Sector = ClientSector.Public });
-            categories.Add(new Category { Description = "HIGHRISK", Rule = ComparisonRule.GreaterThan, ParameterValue = 1000000, Sector = ClientSector.Private });
+            categories.Add(category);
         }
 
-        /// <summary>
-        /// Initializes the Trade Portfolio collection according to the example
-        /// </summary>
-        private void InitPortfolio()
+        public void UpdateCategory(Category newCategory)
         {
-            portfolio = new List<ITrade>();
-            portfolio.Add(new Trade(2000000, ClientSector.Private));
-            portfolio.Add(new Trade(400000, ClientSector.Public));
-            portfolio.Add(new Trade(500000, ClientSector.Public));
-            portfolio.Add(new Trade(3000000, ClientSector.Public));
+            var oldcategory = categories.FirstOrDefault(o => o.Description == newCategory.Description);
+            oldcategory.ParameterValue = newCategory.ParameterValue;
+            oldcategory.Rule = newCategory.Rule;
+            oldcategory.Sector = newCategory.Sector;
+
         }
+
+        public void RemoveCategory(Category category)
+        {
+            categories.RemoveAll(o => o.Description == category.Description);
+        }
+
+
+        public void AddTradeToPortfolio(ITrade trade)
+        {
+            portfolio.Add(trade);
+        }
+
+        
     }
 }
