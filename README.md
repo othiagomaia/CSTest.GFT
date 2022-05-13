@@ -1,3 +1,9 @@
 # CSTest.GFT
-CS Test folder contains a solution for the problem using just the data from the example and a console application
-Procedure folder contains the SQL Server procedural version of the console application
+CS Test folder contains:
+- A solution for the problem using C# Console Application
+- The solution uses Singleton and Facade Design Patterns
+
+Procedure folder contains:
+- SQL Server Script for procedural version of the console application
+- Script also contains Create and Insert commands for the tables
+
